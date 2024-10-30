@@ -1,0 +1,14 @@
+
+services:
+  db:
+    image: postgres:16.2
+    container_name: db_twototango_container
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=twototango
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
