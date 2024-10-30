@@ -3,3 +3,9 @@ export type IResponseData<T = any> = {
   message?: string;
   data: T;
 };
+
+export type PaginatedResult<T = any> = {
+  rows: T[];
+  total: number;
+  page: number;
+};

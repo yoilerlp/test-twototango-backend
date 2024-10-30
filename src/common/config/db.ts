@@ -1,8 +1,9 @@
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Task } from 'src/task/entities/task.entity';
 import { User } from 'src/user/entities/user.entity';
 
-const Entities = [User];
+const Entities = [User, Task];
 
 export const DbModuleProvider = TypeOrmModule.forRootAsync({
   useFactory(config: ConfigService) {
