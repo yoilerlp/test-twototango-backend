@@ -14,6 +14,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { GetUser } from 'src/common/decorators/user';
 import { IUserToken } from 'src/common/interfaces/userToken';
+import { TaskStatus } from './interfaces/task.interface';
 
 @Controller('tasks')
 export class TaskController {
@@ -28,10 +29,14 @@ export class TaskController {
   }
 
   @Get()
-  findAll(@GetUser() user: IUserToken, @Query() params: { page: number }) {
+  findAll(
+    @GetUser() user: IUserToken,
+    @Query() params: { page: number; status: TaskStatus },
+  ) {
     return this.taskService.findAllByUserId({
       userId: user.userId,
       page: params.page,
+      status: params.status,
     });
   }
 

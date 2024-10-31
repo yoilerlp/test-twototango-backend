@@ -8,7 +8,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { TaskStatus } from './interfaces/task.interface';
 import { PaginatedResult } from 'src/common/interfaces/response';
 
@@ -43,14 +43,25 @@ export class TaskService {
   async findAllByUserId(params: {
     userId: string;
     page: number;
+    status?: TaskStatus;
   }): Promise<PaginatedResult<Task>> {
-    const { userId, page: pageQuery } = params;
+    const { userId, page: pageQuery, status } = params;
     const page = pageQuery ? Number(pageQuery) : 1;
-    const LIMIT = 10;
+    const LIMIT = 9;
     const SKIP = (page - 1) * LIMIT;
 
+    const statusIsValid = status && Object.values(TaskStatus).includes(status);
+
+    const filterOptions: FindOptionsWhere<Task> = {
+      userId,
+      ...(statusIsValid && { status }),
+    };
+
     const [result, total] = await this.taskRepository.findAndCount({
-      where: { userId },
+      where: filterOptions,
+      order: {
+        createdAt: 'desc',
+      },
       take: LIMIT,
       skip: SKIP,
     });

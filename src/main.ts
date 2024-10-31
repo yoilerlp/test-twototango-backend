@@ -18,6 +18,8 @@ async function bootstrap() {
     prefix: 'v',
   });
 
+  app.enableCors();
+
   app.useGlobalInterceptors(new TransformResponseInterceptor());
 
   app.useGlobalPipes(
